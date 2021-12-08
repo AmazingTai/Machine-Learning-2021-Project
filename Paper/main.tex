@@ -52,13 +52,19 @@ Your introduction briefly explains the problem you address, and what you’ve ac
 
 
 \section*{Dataset}
+
+\subsection{Dateset overall}
+
 Our project dataset is FIFA 2019 players attributes dataset, which is collected
 from Kaggle. This dataset includes 89 attributes of a soccer player, and our
 project only uses some of these attributes concerning only player capability.
 Besides, considering that goalkeepers have a totally different set of capability
-metrics compared with other players, we will only consider data records of nongoalkeepers in our model.\\
+metrics compared with other players, we will only consider data records of nongoalkeepers in our model.
+
+\subsection{Data processing}
+
 Now we beginning the data processing.
-There are 18206 players for which 89 features each are provided. Fristly, we should drop the duplicate entries. 
+There are 18206 players for which 89 features each are provided. Firstly, we should drop the duplicate entries. 
 Then we check the variables: 
 \begin{center}
 $ID, Name, Age, Photo, Nationality, Flag, Overall, Potential, Club, Club Logo, Value,$\\ 
@@ -74,8 +80,10 @@ $GKDiving, GKHandling, GKKicking, GKPositioning,
 GKReflexes, Release Clause$
 \end{center}
 \\
-We have to delete the missing value which will distrubing our model. 
+Now we have to delete the missing value which will distrubing our model. 
+
 \begin{table}[]
+\centering
 \begin{tabular}{|l|l|l|l|}
 \hline
 \textit{Index} & \textit{column name}          & \textit{Total missing} & \textit{Percent missing} \\ \hline
@@ -122,17 +130,58 @@ We have to delete the missing value which will distrubing our model.
 \textit{86}    & \textit{Special}              & \textit{0}             & \textit{0.000000}        \\ \hline
 \textit{87}    & \textit{ID}                   & \textit{0}             & \textit{0.000000}        \\ \hline
 \end{tabular}
+\caption{Missing value percent}
+\end{table}
+\newpage
+
+
+Considering these missing value we have below comments:
+\begin{itemize}
+    \item Since a big chunk of players are not loaned to other clubs, hence there are $16943$ missing values out of $18206$ i.e. they play for their own club.
+    \item There is a consistency $(11.45\%)$ in missing values for the position (they play on), this needs to be explored.
+    \item Release clause, joined, contract valid until, club, position, jersey number have missing values and need to be explored.
+    \item There is a consistency $(0.26\%)$ in missing values for the players rating attributes.
+\end{itemize}
+\\
+Now we will drop unnecessary columns, which can address the problem simply, reference the FIFA official guideline (https://www.fifauteam.com/fifa-19-attributes-guide/). we only keep significant values that have highly contributed to the model.
+
+\begin{center}
+$Age, Overall, Potential, Weak Foot, Position, Crossing, Finishing, HeadingAccuracy,$ \\
+$ShortPassing, Volleys, Dribbling, Curve, FKAccuracy, LongPassing, BallControl, Acceleration,$ \\
+$SprintSpeed, Agility, Reactions, Balance, ShotPower, Jumping, Stamina, Strength, LongShots,$\\
+$Aggression, Interceptions, Positioning, Vision, Penalties, Composure, Marking, StandingTackle,$ \\
+$SlidingTackle, GKDiving, GKHandling, GKKicking, GKPositioning, GKReflexes$
+\end{center}
+
+We have to delete the missing value which will disturbing our model and then we will filter data with null values for position:
+\\
+\clearpage
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textit{Index} & \textit{column name}   & \textit{Total missing} & \textit{Percent missing} \\ \hline
+\textit{0}     & \textit{Position}      & \textit{60}            & \textit{0.003295}        \\ \hline
+\textit{1}     & \textit{GKReflexes}    & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{2}     & \textit{Curve}         & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{...}   & \textit{...}           & \textit{...}           & \textit{...}             \\ \hline
+\textit{30}    & \textit{Positioning}   & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{31}    & \textit{Interceptions} & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{32}    & \textit{Aggression}    & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{33}    & \textit{LongShots}     & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{34}    & \textit{Strength}      & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{35}    & \textit{Stamina}       & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{36}    & \textit{Potential}     & \textit{0}             & \textit{0.000000}        \\ \hline
+\textit{37}    & \textit{Overall}       & \textit{0}             & \textit{0.000000}        \\ \hline
+\textit{38}    & \textit{Age}           & \textit{0}             & \textit{0.000000}        \\ \hline
+\end{tabular}
+\caption{Missing value percent in useful attribute}
 \end{table}
 
+After handling these missing values we have 18147 rows thought, subtracting the 60 missing values.
+Besides, we have to transform some $string$ type values to $int$ type, which guarantees our model works. 
 
-
-Conserning these missing value we have belowing comments:\\
-(i) Since a big chunk of players are not loaned to other clubs, hence there are $16943$ missing values out of $18206$ i.e. they play for their own club.\\
-(ii) There is a consistency $(11.45\%)$ in missing values for the position (they play on), this needs to be explored.\\
-(iii) Release clause, joined, contract valid until, club, position, jersey number have missing values and need to be explored.\\
-(iv) There is a consistency $(0.26\%)$ in missing values for the players rating attributes.
-
-
+At last, we partition original player data according to positions, we mainly divide players into 4 positions: \textbf{Forward}, \textbf{Midfielder}, \textbf{Back}, and \textbf{Goalkeeper}.
 
 \section*{Solution}
 
