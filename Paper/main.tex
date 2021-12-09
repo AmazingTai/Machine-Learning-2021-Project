@@ -23,10 +23,10 @@
 }
 
 %%%% PROJECT TITLE
-\title{Your Wonderful Project Topic}
+\title{Machine Learning Approach to Soccer Player's Overall Rating Prediction}
 
 %%%% NAMES OF ALL THE STUDENTS INVOLVED (first-name last-name)
-\author{\href{mailto:author1@nyu.edu}{Author \#1}, \href{mailto:author2@nyu.edu}{Author \#2}}
+\author{\href{mailto:ao2186@nyu.edu}{Antai Ouyang \#1}, \href{mailto:xl3215@nyu.edu}{Xianglong Li \#2}, \href{mailto:hl4151@nyu.edu}{Haochen Li \#3}}
 
 \date{\vspace{-5ex}} %NO DATE
 
@@ -39,7 +39,7 @@
 \begin{abstract}
     A abstract sums up your work in very few sentences:
     (i) state the problem you are addressing;
-    (ii) say why it’s an interesting problem, and which issues are hard to tackle; 
+    (ii) say why it's an interesting problem, and which issues are hard to tackle; 
     (iii) give your approach towards solving the problem; 
     (iv) say Why and how well your approach solves the problem.
 \end{abstract}
@@ -47,7 +47,7 @@
 
 \section*{Introduction}
 
-Your introduction briefly explains the problem you address, and what you’ve achieved towards solving the problem. It’s an edited and updated version of your introduction and objective from your topic proposal
+Your introduction briefly explains the problem you address, and what you've achieved towards solving the problem. It's an edited and updated version of your introduction and objective from your topic proposal
 
 
 
@@ -79,8 +79,7 @@ $SprintSpeed, Agility, Reactions, Balance, ShotPower, Jumping, Stamina, Strength
 $GKDiving, GKHandling, GKKicking, GKPositioning,
 GKReflexes, Release Clause$
 \end{center}
-\\
-Now we have to delete the missing value which will distrubing our model. 
+\par Now we have to delete the missing value which will distrubing our model. 
 
 \begin{table}[]
 \centering
@@ -142,8 +141,7 @@ Considering these missing value we have below comments:
     \item Release clause, joined, contract valid until, club, position, jersey number have missing values and need to be explored.
     \item There is a consistency $(0.26\%)$ in missing values for the players rating attributes.
 \end{itemize}
-\\
-Now we will drop unnecessary columns, which can address the problem simply, reference the FIFA official guideline (https://www.fifauteam.com/fifa-19-attributes-guide/). we only keep significant values that have highly contributed to the model.
+\par Now we will drop unnecessary columns, which can address the problem simply, reference the FIFA official guideline (https://www.fifauteam.com/fifa-19-attributes-guide/). we only keep significant values that have highly contributed to the model.
 
 \begin{center}
 $Age, Overall, Potential, Weak Foot, Position, Crossing, Finishing, HeadingAccuracy,$ \\
