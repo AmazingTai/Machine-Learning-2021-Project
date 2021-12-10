@@ -23,10 +23,10 @@
 }
 
 %%%% PROJECT TITLE
-\title{Machine Learning Approach to Soccer Player's Overall Rating Prediction}
+\title{Your Wonderful Project Topic}
 
 %%%% NAMES OF ALL THE STUDENTS INVOLVED (first-name last-name)
-\author{\href{mailto:ao2186@nyu.edu}{Antai Ouyang \#1}, \href{mailto:xl3215@nyu.edu}{Xianglong Li \#2}, \href{mailto:hl4151@nyu.edu}{Haochen Li \#3}}
+\author{\href{mailto:author1@nyu.edu}{Author \#1}, \href{mailto:author2@nyu.edu}{Author \#2}}
 
 \date{\vspace{-5ex}} %NO DATE
 
@@ -37,18 +37,51 @@
 
 
 \begin{abstract}
-    A abstract sums up your work in very few sentences:
-    (i) state the problem you are addressing;
-    (ii) say why it's an interesting problem, and which issues are hard to tackle; 
-    (iii) give your approach towards solving the problem; 
-    (iv) say Why and how well your approach solves the problem.
+    
+    
+    For this project, I am positioning myself as a scouting agency that uses analytics to, among other things, enhance the discovery of talents and help soccer clubs better understand the dynamics (features) that come into play when determining the value, overall and future potential of a player. 
+    
+    Although the $overall$ rating is the most important value either in the real football market or FIFA games, the official rating criteria is still not published. 
+    Our model is to predict the $overall$ rating of players given their several capability values, which use the data classified by players' position and the whole position data.
+    Besides, our
+    project only uses some of these attributes concerning only player capability according to official guideline.
+    
+    To demonstrate the benefits of our model, we built various charts and evaluated it. In our experiments, neural networks could ... compared to liner regression.
+    
 \end{abstract}
 
 
 \section*{Introduction}
+The Fédération Internationale de Football Association (FIFA) will publish the
+overall rating and other metrics for soccer players every year. Although the
+metrics can affect the overall rating of a player, the exact rating criteria is still
+not published. Our project is to predict the overall rating of players given their
+capability values.
+Several data analyses projects have been designed for this dataset. However,
+these projects only focus on evaluating the metrics of players but failed to predict
+the overall rating of players. Some projects tried to predict the overall rating
+of players, but these projects still lack the comparison among different models
+to choose the best one or give any persuasive insights or conclusions. Our project tries different models for rating
+prediction and determine their performances to find the best model and give insightful conclusions and opinions.
 
-Your introduction briefly explains the problem you address, and what you've achieved towards solving the problem. It's an edited and updated version of your introduction and objective from your topic proposal
+We implement regression methods in machine learning to this problem.
+We have trained our model based on a set of data randomly selected from our
+dataset, and then test our model on a stand-out test set also selected from our
+dataset. In this way, we create and validate a model predicting the overall
+rating of a player.
 
+
+Our project dataset is FIFA 2019 players attributes dataset, which is collected
+from Kaggle. This dataset includes 89 attributes of a soccer player, and our
+project only uses some of these attributes concerning only player capability.
+Besides, considering that goalkeepers have a totally different set of capability
+metrics compared with other players.
+
+We implement linear regression and neural networks in our project. For each model, we use cross validation to find the
+best hyperparameter for each model. We compare their performance based
+on their $r2 score$ and testing $RMSE$. Finally choose the most accurate model, neural networks. In order to finish this model fitting and predicting process, we plan
+to randomly select data from our dataset, and then split the selected data into
+training and testing sets to implement cross validation.
 
 
 \section*{Dataset}
@@ -79,7 +112,8 @@ $SprintSpeed, Agility, Reactions, Balance, ShotPower, Jumping, Stamina, Strength
 $GKDiving, GKHandling, GKKicking, GKPositioning,
 GKReflexes, Release Clause$
 \end{center}
-\par Now we have to delete the missing value which will distrubing our model. 
+\\
+Now we have to delete the missing value which will distrubing our model. 
 
 \begin{table}[]
 \centering
@@ -141,7 +175,8 @@ Considering these missing value we have below comments:
     \item Release clause, joined, contract valid until, club, position, jersey number have missing values and need to be explored.
     \item There is a consistency $(0.26\%)$ in missing values for the players rating attributes.
 \end{itemize}
-\par Now we will drop unnecessary columns, which can address the problem simply, reference the FIFA official guideline (https://www.fifauteam.com/fifa-19-attributes-guide/). we only keep significant values that have highly contributed to the model.
+\\
+Now we will drop unnecessary columns, which can address the problem simply, reference the FIFA official guideline (https://www.fifauteam.com/fifa-19-attributes-guide/). we only keep significant values that have highly contributed to the model.
 
 \begin{center}
 $Age, Overall, Potential, Weak Foot, Position, Crossing, Finishing, HeadingAccuracy,$ \\
