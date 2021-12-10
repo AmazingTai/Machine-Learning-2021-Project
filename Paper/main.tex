@@ -11,6 +11,7 @@
 \usepackage{tikz}
 \usepackage{enumitem}
 \usepackage{amsthm}
+\usepackage{makecell}
 
 %\lhead{\includegraphics[width=0.2\textwidth]{nyush-logo.pdf}}
 \fancypagestyle{firstpage}{%
@@ -98,123 +99,75 @@ metrics compared with other players, we will only consider data records of nongo
 
 Now we beginning the data processing.
 There are 18206 players for which 89 features each are provided. Firstly, we should drop the duplicate entries. 
-Then we check the variables: 
-\begin{center}
-$ID, Name, Age, Photo, Nationality, Flag, Overall, Potential, Club, Club Logo, Value,$\\ 
-$Wage, Special, Preferred Foot, International Reputation, Weak Foot, Skill Moves,$\\
-$Work Rate, Body Type, Real Face, Position, Jersey Number, $\\
-$Joined, Loaned From, Contract Valid Until,Height, Weight,$\\
-$LS, ST, RS, LW, LF, CF, RF, RW, LAM, CAM, RAM, LM, LCM, CM,$\\
-$RCM, RM, LWB, LDM, CDM, RDM, RWB, LB, LCB, CB, RCB, RB,$ \\
-$Crossing, Finishing, HeadingAccuracy, ShortPassing, Volleys, Dribbling,$\\ 
-$Curve, FKAccuracy, LongPassing, BallControl, Acceleration,$\\ 
-$SprintSpeed, Agility, Reactions, Balance, ShotPower, Jumping, Stamina, Strength,$\\ $LongShots, Aggression, Interceptions, Positioning, Vision, Penalties, Composure,$\\ $Marking, StandingTackle, SlidingTackle,$\\
-$GKDiving, GKHandling, GKKicking, GKPositioning,
-GKReflexes, Release Clause$
-\end{center}
-\\
-Now we have to delete the missing value which will distrubing our model. 
+Then we check the columns (attributes). These columns can be grouped into 6 categories as follows: 
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{|l|l|}
+    \hline
+    \makecell[c]{\textit{Category}}     &       \makecell[c]{\textit{Attributes}} \\ \hline
+    \textit{Basic Information}          &       \makecell[c]{\textit{ID, Name, Age, Photo, Nationality, Real Face, Height, Weight,} \\
+                                                \textit{Body Type, Special, Flag, Position, Club, Club Logo, Work Rate,} \\
+                                                \textit{Jersey Number, Weak Foot, Preferred Foot, Skill Moves,} \\
+                                                \textit{International Reputation}} \\ \hline
+    \textit{Ratings}                    &       \makecell[c]{\textit{Overall, Potential, LS, ST, RS, LW, LF, CF, RF, RW, LAM,} \\
+                                                \textit{CAM, RAM, LM, LCM, CM, RCM, RM, LWB, LDM, CDM,} \\
+                                                \textit{RDM, RWB, LB, LCB, CB, RCB, RB}} \\ \hline
+    \textit{Market Value Related}       &       \makecell[c]{\textit{Value, Wage, Joined, Loaned From, Contract Valid Until,} \\
+                                                \textit{Release Clause}} \\ \hline
+    \textit{Abilities}                  &       \makecell[c]{\textit{Crossing, Finishing, HeadingAccuracy, ShortPassing, Volleys,} \\
+                                                \textit{Dribbling, Curve,FKAccuracy, LongPassing, BallControl,} \\
+                                                \textit{Acceleration, SprintSpeed, Agility, Reactions, Balance, ShotPower,} \\
+                                                \textit{Jumping, Stamina, Strength, LongShots, Aggression, Interceptions,} \\
+                                                \textit{Positioning, Vision, Penalties,Composure, Marking, StandingTackle,} \\ \textit{SlidingTackle}} \\ \hline
+    \textit{Goalkeeper Abilities}       &       \makecell[c]{\textit{GKDiving, GKHandling, GKKicking, GKPositioning, GKReflexes}} \\ \hline
+    \end{tabular}
+    \caption{Columns (attributes) in the original dataset.}
+\end{table}
+
+\par Our model only focuses on predicting the overall rating of a player. Thus, we only need to keep those attributes related to the ability of players and drop the other irrelavent attributes. Besides, our model does not consider ratings on different positions for the same player. Thus, we only keep attributes as follows:
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{|l|l|}
+    \hline
+    \makecell[c]{\textit{Category}}     &       \makecell[c]{\textit{Attributes}} \\ \hline
+    \textit{Basic Information}          &       \makecell[c]{\textit{Age, Position}} \\ \hline
+    \textit{Ratings}                    &       \makecell[c]{\textit{Overall} (as target value)} \\ \hline
+    \textit{Abilities}                  &       \makecell[c]{\textit{Crossing, Finishing, HeadingAccuracy, ShortPassing, Volleys,} \\
+                                                \textit{Dribbling, Curve,FKAccuracy, LongPassing, BallControl,} \\
+                                                \textit{Acceleration, SprintSpeed, Agility, Reactions, Balance, ShotPower,} \\
+                                                \textit{Jumping, Stamina, Strength, LongShots, Aggression, Interceptions,} \\
+                                                \textit{Positioning, Vision, Penalties,Composure, Marking, StandingTackle,} \\ \textit{SlidingTackle}} \\ \hline
+    \textit{Goalkeeper Abilities}       &       \makecell[c]{\textit{GKDiving, GKHandling, GKKicking, GKPositioning, GKReflexes}} \\ \hline
+    \end{tabular}
+    \caption{Columns (attributes) in the dataset for model prediction.}
+\end{table}
+
+\par After deleting all the irrelavent attributes, we still have to delete data records with missing values. These records are resulted from , and they could introduce errors into our prediction. The null values in each column are counted and sorted as follows:
 
 \begin{table}[]
 \centering
 \begin{tabular}{|l|l|l|l|}
 \hline
 \textit{Index} & \textit{column name}          & \textit{Total missing} & \textit{Percent missing} \\ \hline
-\textit{0}     & \textit{Loaned From}          & \textit{16943}         & \textit{0.930576}        \\ \hline
-\textit{1}     & \textit{LWB}                  & \textit{2085}          & \textit{0.114516}        \\ \hline
-\textit{2}     & \textit{LM}                   & \textit{2085}          & \textit{0.114516}        \\ \hline
+\textit{0}     & \textit{Position}             & \textit{60}            & \textit{0.003295}        \\ \hline
+\textit{1}     & \textit{GKReflexes}           & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{2}     & \textit{Curve}                & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{3}     & \textit{Agility}              & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{4}     & \textit{SprintSpeed}          & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{5}     & \textit{Acceleration}         & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{6}     & \textit{BallControl}          & \textit{48}            & \textit{0.002636}        \\ \hline
 \textit{...}   & \textit{...}                  & \textit{...}           & \textit{...}             \\ \hline
-\textit{23}    & \textit{RS}                   & \textit{2085}          & \textit{0.114516}        \\ \hline
-\textit{24}    & \textit{ST}                   & \textit{2085}          & \textit{0.114516}        \\ \hline
-\textit{25}    & \textit{LS}                   & \textit{2085}          & \textit{0.114516}        \\ \hline
-\textit{26}    & \textit{RCB}                  & \textit{2085}          & \textit{0.114516}        \\ \hline
-\textit{27}    & \textit{Release Clause}       & \textit{1564}          & \textit{0.085901}        \\ \hline
-\textit{28}    & \textit{Joined}               & \textit{1553}          & \textit{0.085297}        \\ \hline
-\textit{29}    & \textit{Contract Valid Until} & \textit{289}           & \textit{0.015873}        \\ \hline
-..             & \textit{...}                  & \textit{...}           & \textit{...}             \\ \hline
-\textit{58}    & \textit{Finishing}            & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{59}    & \textit{Crossing}             & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{60}    & \textit{Positioning}          & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{61}    & \textit{LongPassing}          & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{62}    & \textit{BallControl}          & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{63}    & \textit{Acceleration}         & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{64}    & \textit{SprintSpeed}          & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{65}    & \textit{FKAccuracy}           & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{66}    & \textit{Reactions}            & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{67}    & \textit{ShotPower}            & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{68}    & \textit{GKReflexes}           & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{69}    & \textit{Jumping}              & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{70}    & \textit{Stamina}              & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{71}    & \textit{Strength}             & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{72}    & \textit{LongShots}            & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{73}    & \textit{Aggression}           & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{74}    & \textit{Balance}              & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{75}    & \textit{Interceptions}        & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{76}    & \textit{Flag}                 & \textit{0}             & \textit{0.000000}        \\ \hline
-\textit{77}    & \textit{Name}                 & \textit{0}             & \textit{0.000000}        \\ \hline
-\textit{78}    & \textit{Age}                  & \textit{0}             & \textit{0.000000}        \\ \hline
-\textit{79}    & \textit{Photo}                & \textit{0}             & \textit{0.000000}        \\ \hline
-\textit{80}    & \textit{Nationality}          & \textit{0}             & \textit{0.000000}        \\ \hline
-\textit{81}    & \textit{Value}                & \textit{0}             & \textit{0.000000}        \\ \hline
-\textit{82}    & \textit{Overall}              & \textit{0}             & \textit{0.000000}        \\ \hline
-\textit{83}    & \textit{Potential}            & \textit{0}             & \textit{0.000000}        \\ \hline
-\textit{84}    & \textit{Club Logo}            & \textit{0}             & \textit{0.000000}        \\ \hline
-\textit{85}    & \textit{Wage}                 & \textit{0}             & \textit{0.000000}        \\ \hline
-\textit{86}    & \textit{Special}              & \textit{0}             & \textit{0.000000}        \\ \hline
-\textit{87}    & \textit{ID}                   & \textit{0}             & \textit{0.000000}        \\ \hline
+\textit{35}    & \textit{Stamina}              & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{36}    & \textit{Overall}              & \textit{0}             & \textit{0.000000}        \\ \hline
+\textit{37}    & \textit{Age}                  & \textit{0}             & \textit{0.000000}        \\ \hline
 \end{tabular}
-\caption{Missing value percent}
-\end{table}
-\newpage
-
-
-Considering these missing value we have below comments:
-\begin{itemize}
-    \item Since a big chunk of players are not loaned to other clubs, hence there are $16943$ missing values out of $18206$ i.e. they play for their own club.
-    \item There is a consistency $(11.45\%)$ in missing values for the position (they play on), this needs to be explored.
-    \item Release clause, joined, contract valid until, club, position, jersey number have missing values and need to be explored.
-    \item There is a consistency $(0.26\%)$ in missing values for the players rating attributes.
-\end{itemize}
-\\
-Now we will drop unnecessary columns, which can address the problem simply, reference the FIFA official guideline (https://www.fifauteam.com/fifa-19-attributes-guide/). we only keep significant values that have highly contributed to the model.
-
-\begin{center}
-$Age, Overall, Potential, Weak Foot, Position, Crossing, Finishing, HeadingAccuracy,$ \\
-$ShortPassing, Volleys, Dribbling, Curve, FKAccuracy, LongPassing, BallControl, Acceleration,$ \\
-$SprintSpeed, Agility, Reactions, Balance, ShotPower, Jumping, Stamina, Strength, LongShots,$\\
-$Aggression, Interceptions, Positioning, Vision, Penalties, Composure, Marking, StandingTackle,$ \\
-$SlidingTackle, GKDiving, GKHandling, GKKicking, GKPositioning, GKReflexes$
-\end{center}
-
-We have to delete the missing value which will disturbing our model and then we will filter data with null values for position:
-\\
-\clearpage
-\begin{table}[]
-\centering
-\begin{tabular}{|l|l|l|l|}
-\hline
-\textit{Index} & \textit{column name}   & \textit{Total missing} & \textit{Percent missing} \\ \hline
-\textit{0}     & \textit{Position}      & \textit{60}            & \textit{0.003295}        \\ \hline
-\textit{1}     & \textit{GKReflexes}    & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{2}     & \textit{Curve}         & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{...}   & \textit{...}           & \textit{...}           & \textit{...}             \\ \hline
-\textit{30}    & \textit{Positioning}   & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{31}    & \textit{Interceptions} & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{32}    & \textit{Aggression}    & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{33}    & \textit{LongShots}     & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{34}    & \textit{Strength}      & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{35}    & \textit{Stamina}       & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{36}    & \textit{Potential}     & \textit{0}             & \textit{0.000000}        \\ \hline
-\textit{37}    & \textit{Overall}       & \textit{0}             & \textit{0.000000}        \\ \hline
-\textit{38}    & \textit{Age}           & \textit{0}             & \textit{0.000000}        \\ \hline
-\end{tabular}
-\caption{Missing value percent in useful attribute}
+\caption{Missing value percent.}
 \end{table}
 
-After handling these missing values we have 18147 rows thought, subtracting the 60 missing values.
-Besides, we have to transform some $string$ type values to $int$ type, which guarantees our model works. 
-
-At last, we partition original player data according to positions, we mainly divide players into 4 positions: \textbf{Forward}, \textbf{Midfielder}, \textbf{Back}, and \textbf{Goalkeeper}.
+\par After deleting these missing values, we have 18147 rows left. After that, we still should inspect the data types of each column, and we should ensure the input attributes of our model are all of type $int$ to guarantee that our model works. The only attribute violating this in our model prediction dataset is $Position$. This attribute only indicates the position of a soccer player. Thus, we can divide all records into different categories according to their positions.
+\par We mainly divide players into 4 positions: \textbf{Forward}, \textbf{Midfielder}, \textbf{Back}, and \textbf{Goalkeeper}, and 4 CSV files are built for each of these categories to store them separately. Specially, we also built a CSV file to store all data together after our processing above.
 
 \section*{Solution}
 
