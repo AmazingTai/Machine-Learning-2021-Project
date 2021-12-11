@@ -11,6 +11,179 @@
 \usepackage{tikz}
 \usepackage{enumitem}
 \usepackage{amsthm}
+
+%\lhead{\includegraphics[width=0.2\textwidth]{nyush-logo.pdf}}
+\fancypagestyle{firstpage}{%
+  \lhead{NYU Shanghai}
+  \rhead{
+  %%%% COMMENT OUT / UNCOMMENT THE LINES BELOW TO FIT WITH YOUR MAJOR(S)
+  %\&
+  %Data
+   Machine Learning 2021}
+}
+
+%%%% PROJECT TITLE
+\title{Your Wonderful Project Topic}
+
+%%%% NAMES OF ALL THE STUDENTS INVOLVED (first-name last-name)
+\author{\href{mailto:author1@nyu.edu}{Author \#1}, \href{mailto:author2@nyu.edu}{Author \#2}}
+
+\date{\vspace{-5ex}} %NO DATE
+
+
+\begin{document}
+\maketitle
+\thispagestyle{firstpage}
+
+
+\begin{abstract}
+    
+    
+    For this project, I am positioning myself as a scouting agency that uses analytics to, among other things, enhance the discovery of talents and help soccer clubs better understand the dynamics (features) that come into play when determining the value, overall and future potential of a player. 
+    
+    Although the $overall$ rating is the most important value either in the real football market or FIFA games, the official rating criteria is still not published. 
+    Our model is to predict the $overall$ rating of players given their several capability values, which use the data classified by players' position and the whole position data.
+    Besides, our
+    project only uses some of these attributes concerning only player capability according to official guideline.
+    
+    To demonstrate the benefits of our model, we built various charts and evaluated it. In our experiments, neural networks could ... compared to liner regression.
+    
+\end{abstract}
+
+
+\section*{Introduction}
+The Fédération Internationale de Football Association (FIFA) will publish the
+overall rating and other metrics for soccer players every year. Although the
+metrics can affect the overall rating of a player, the exact rating criteria is still
+not published. Our project is to predict the overall rating of players given their
+capability values.
+Several data analyses projects have been designed for this dataset. However,
+these projects only focus on evaluating the metrics of players but failed to predict
+the overall rating of players. Some projects tried to predict the overall rating
+of players, but these projects still lack the comparison among different models
+to choose the best one or give any persuasive insights or conclusions. Our project tries different models for rating
+prediction and determine their performances to find the best model and give insightful conclusions and opinions.
+
+We implement regression methods in machine learning to this problem.
+We have trained our model based on a set of data randomly selected from our
+dataset, and then test our model on a stand-out test set also selected from our
+dataset. In this way, we create and validate a model predicting the overall
+rating of a player.
+
+
+Our project dataset is FIFA 2019 players attributes dataset, which is collected
+from Kaggle. This dataset includes 89 attributes of a soccer player, and our
+project only uses some of these attributes concerning only player capability.
+Besides, considering that goalkeepers have a totally different set of capability
+metrics compared with other players.
+
+We implement linear regression and neural networks in our project. For each model, we use cross validation to find the
+best hyperparameter for each model. We compare their performance based
+on their $r2 score$ and testing $RMSE$. Finally choose the most accurate model, neural networks. In order to finish this model fitting and predicting process, we plan
+to randomly select data from our dataset, and then split the selected data into
+training and testing sets to implement cross validation.
+
+
+\section*{Dataset}
+
+\subsection{Dateset overall}
+
+Our project dataset is FIFA 2019 players attributes dataset, which is collected
+from Kaggle. This dataset includes 89 attributes of a soccer player, and our
+project only uses some of these attributes concerning only player capability.
+Besides, considering that goalkeepers have a totally different set of capability
+metrics compared with other players, we will only consider data records of nongoalkeepers in our model.
+
+\subsection{Data processing}
+
+Now we beginning the data processing.
+There are 18206 players for which 89 features each are provided. Firstly, we should drop the duplicate entries. 
+Then we check the variables: 
+\begin{center}
+$ID, Name, Age, Photo, Nationality, Flag, Overall, Potential, Club, Club Logo, Value,$\\ 
+$Wage, Special, Preferred Foot, International Reputation, Weak Foot, Skill Moves,$\\
+$Work Rate, Body Type, Real Face, Position, Jersey Number, $\\
+$Joined, Loaned From, Contract Valid Until,Height, Weight,$\\
+$LS, ST, RS, LW, LF, CF, RF, RW, LAM, CAM, RAM, LM, LCM, CM,$\\
+$RCM, RM, LWB, LDM, CDM, RDM, RWB, LB, LCB, CB, RCB, RB,$ \\
+$Crossing, Finishing, HeadingAccuracy, ShortPassing, Volleys, Dribbling,$\\ 
+$Curve, FKAccuracy, LongPassing, BallControl, Acceleration,$\\ 
+$SprintSpeed, Agility, Reactions, Balance, ShotPower, Jumping, Stamina, Strength,$\\ $LongShots, Aggression, Interceptions, Positioning, Vision, Penalties, Composure,$\\ $Marking, StandingTackle, SlidingTackle,$\\
+$GKDiving, GKHandling, GKKicking, GKPositioning,
+GKReflexes, Release Clause$
+\end{center}
+\\
+Now we have to delete the missing value which will distrubing our model. 
+
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textit{Index} & \textit{column name}          & \textit{Total missing} & \textit{Percent missing} \\ \hline
+\textit{0}     & \textit{Loaned From}          & \textit{16943}         & \textit{0.930576}        \\ \hline
+\textit{1}     & \textit{LWB}                  & \textit{2085}          & \textit{0.114516}        \\ \hline
+\textit{2}     & \textit{LM}                   & \textit{2085}          & \textit{0.114516}        \\ \hline
+\textit{...}   & \textit{...}                  & \textit{...}           & \textit{...}             \\ \hline
+\textit{23}    & \textit{RS}                   & \textit{2085}          & \textit{0.114516}        \\ \hline
+\textit{24}    & \textit{ST}                   & \textit{2085}          & \textit{0.114516}        \\ \hline
+\textit{25}    & \textit{LS}                   & \textit{2085}          & \textit{0.114516}        \\ \hline
+\textit{26}    & \textit{RCB}                  & \textit{2085}          & \textit{0.114516}        \\ \hline
+\textit{27}    & \textit{Release Clause}       & \textit{1564}          & \textit{0.085901}        \\ \hline
+\textit{28}    & \textit{Joined}               & \textit{1553}          & \textit{0.085297}        \\ \hline
+\textit{29}    & \textit{Contract Valid Until} & \textit{289}           & \textit{0.015873}        \\ \hline
+..             & \textit{...}                  & \textit{...}           & \textit{...}             \\ \hline
+\textit{58}    & \textit{Finishing}            & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{59}    & \textit{Crossing}             & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{60}    & \textit{Positioning}          & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{61}    & \textit{LongPassing}          & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{62}    & \textit{BallControl}          & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{63}    & \textit{Acceleration}         & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{64}    & \textit{SprintSpeed}          & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{65}    & \textit{FKAccuracy}           & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{66}    & \textit{Reactions}            & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{67}    & \textit{ShotPower}            & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{68}    & \textit{GKReflexes}           & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{69}    & \textit{Jumping}              & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{70}    & \textit{Stamina}              & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{71}    & \textit{Strength}             & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{72}    & \textit{LongShots}            & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{73}    & \textit{Aggression}           & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{74}    & \textit{Balance}              & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{75}    & \textit{Interceptions}        & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{76}    & \textit{Flag}                 & \textit{0}             & \textit{0.000000}        \\ \hline
+\textit{77}    & \textit{Name}                 & \textit{0}             & \textit{0.000000}        \\ \hline
+\textit{78}    & \textit{Age}                  & \textit{0}             & \textit{0.000000}        \\ \hline
+\textit{79}    & \textit{Photo}                & \textit{0}             & \textit{0.000000}        \\ \hline
+\textit{80}    & \textit{Nationality}          & \textit{0}             & \textit{0.000000}        \\ \hline
+\textit{81}    & \textit{Value}                & \textit{0}             & \textit{0.000000}        \\ \hline
+\textit{82}    & \textit{Overall}              & \textit{0}             & \textit{0.000000}        \\ \hline
+\textit{83}    & \textit{Potential}            & \textit{0}             & \textit{0.000000}        \\ \hline
+\textit{84}    & \textit{Club Logo}            & \textit{0}             & \textit{0.000000}        \\ \hline
+\textit{85}    & \textit{Wage}                 & \textit{0}             & \textit{0.000000}        \\ \hline
+\textit{86}    & \textit{Special}              & \textit{0}             & \textit{0.000000}        \\ \hline
+\textit{87}    & \textit{ID}                   & \textit{0}             & \textit{0.000000}        \\ \hline
+\end{tabular}
+\caption{Missing value percent}
+\end{table}
+\newpage
+
+
+Considering these missing value we have below comments:
+\begin{itemize}
+    \item Since a big chunk of players are not loaned to other clubs, hence there are $16943$ missing values out of $18206$ i.e. they play for their own club.
+    \item There is a consistency $(11.45\%)$ in missing values f% THIS TEMPLATE IS A WORK IN PROGRESS
+
+\documentclass{article}
+
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{amsfonts,amsmath}
+\usepackage{latexsym}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{amsthm}
 \usepackage{makecell}
 
 %\lhead{\includegraphics[width=0.2\textwidth]{nyush-logo.pdf}}
@@ -215,6 +388,68 @@ The problem with choosing the hyperparameters is that no set will work best acro
 
 
 \subsection*{Evaluate Final Model on the Test Set}
+
+
+
+\section*{Results and Discussion}
+The results section details your metrics and experiments for the assessment of your solution. It allows you to compare your idea with other approaches you've tested. 
+
+\nocite{*}
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+
+
+\end{document}
+or the position (they play on), this needs to be explored.
+    \item Release clause, joined, contract valid until, club, position, jersey number have missing values and need to be explored.
+    \item There is a consistency $(0.26\%)$ in missing values for the players rating attributes.
+\end{itemize}
+\\
+Now we will drop unnecessary columns, which can address the problem simply, reference the FIFA official guideline (https://www.fifauteam.com/fifa-19-attributes-guide/). we only keep significant values that have highly contributed to the model.
+
+\begin{center}
+$Age, Overall, Potential, Weak Foot, Position, Crossing, Finishing, HeadingAccuracy,$ \\
+$ShortPassing, Volleys, Dribbling, Curve, FKAccuracy, LongPassing, BallControl, Acceleration,$ \\
+$SprintSpeed, Agility, Reactions, Balance, ShotPower, Jumping, Stamina, Strength, LongShots,$\\
+$Aggression, Interceptions, Positioning, Vision, Penalties, Composure, Marking, StandingTackle,$ \\
+$SlidingTackle, GKDiving, GKHandling, GKKicking, GKPositioning, GKReflexes$
+\end{center}
+
+We have to delete the missing value which will disturbing our model and then we will filter data with null values for position:
+\\
+\clearpage
+\begin{table}[]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textit{Index} & \textit{column name}   & \textit{Total missing} & \textit{Percent missing} \\ \hline
+\textit{0}     & \textit{Position}      & \textit{60}            & \textit{0.003295}        \\ \hline
+\textit{1}     & \textit{GKReflexes}    & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{2}     & \textit{Curve}         & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{...}   & \textit{...}           & \textit{...}           & \textit{...}             \\ \hline
+\textit{30}    & \textit{Positioning}   & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{31}    & \textit{Interceptions} & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{32}    & \textit{Aggression}    & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{33}    & \textit{LongShots}     & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{34}    & \textit{Strength}      & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{35}    & \textit{Stamina}       & \textit{48}            & \textit{0.002636}        \\ \hline
+\textit{36}    & \textit{Potential}     & \textit{0}             & \textit{0.000000}        \\ \hline
+\textit{37}    & \textit{Overall}       & \textit{0}             & \textit{0.000000}        \\ \hline
+\textit{38}    & \textit{Age}           & \textit{0}             & \textit{0.000000}        \\ \hline
+\end{tabular}
+\caption{Missing value percent in useful attribute}
+\end{table}
+
+After handling these missing values we have 18147 rows thought, subtracting the 60 missing values.
+Besides, we have to transform some $string$ type values to $int$ type, which guarantees our model works. 
+
+At last, we partition original player data according to positions, we mainly divide players into 4 positions: \textbf{Forward}, \textbf{Midfielder}, \textbf{Back}, and \textbf{Goalkeeper}.
+
+\section*{Solution}
+
+The solution section covers all of your model design, algorithms, formulas, findings etc. It explains in detail each contribution, if possible with figures/schematics.
+
 
 
 
