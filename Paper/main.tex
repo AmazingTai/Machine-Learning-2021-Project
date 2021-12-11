@@ -24,10 +24,10 @@
 }
 
 %%%% PROJECT TITLE
-\title{Your Wonderful Project Topic}
+\title{Machine Learning Approach to Soccer Player's Overall Rating Prediction}
 
 %%%% NAMES OF ALL THE STUDENTS INVOLVED (first-name last-name)
-\author{\href{mailto:author1@nyu.edu}{Author \#1}, \href{mailto:author2@nyu.edu}{Author \#2}}
+\author{\href{mailto:ao2186@nyu.edu}{Antai Ouyang \#1}, \href{mailto:xl3215@nyu.edu}{Xianglong Li \#2}, \href{mailto:hl4151@nyu.edu}{Haochen Li \#3}}
 
 \date{\vspace{-5ex}} %NO DATE
 
@@ -40,12 +40,9 @@
 \begin{abstract}
     
     
-    For this project, I am positioning myself as a scouting agency that uses analytics to, among other things, enhance the discovery of talents and help soccer clubs better understand the dynamics (features) that come into play when determining the value, overall and future potential of a player. 
+    For this project, we are positioning ourselves as a scouting agency that uses analytics to, among other things, enhance the discovery of talents and help soccer clubs better understand the dynamics (features) that come into play when determining the overall ability of a player. 
     
-    Although the $overall$ rating is the most important value either in the real football market or FIFA games, the official rating criteria is still not published. 
-    Our model is to predict the $overall$ rating of players given their several capability values, which use the data classified by players' position and the whole position data.
-    Besides, our
-    project only uses some of these attributes concerning only player capability according to official guideline.
+    Although the $overall$ rating is the most important value either in the real football market or FIFA games, the official rating criteria is still not published. Our model is to predict the $overall$ rating of players given their several capability values. Specially, we will divide players' position into 4 categories: forwards / strikers, midfielders, backfielders and goalkeepers, and we will predict overall ratings for each of these categories respectively.
     
     To demonstrate the benefits of our model, we built various charts and evaluated it. In our experiments, neural networks could ... compared to liner regression.
     
@@ -53,36 +50,20 @@
 
 
 \section*{Introduction}
-The Fédération Internationale de Football Association (FIFA) will publish the
-overall rating and other metrics for soccer players every year. Although the
-metrics can affect the overall rating of a player, the exact rating criteria is still
-not published. Our project is to predict the overall rating of players given their
-capability values.
-Several data analyses projects have been designed for this dataset. However,
-these projects only focus on evaluating the metrics of players but failed to predict
-the overall rating of players. Some projects tried to predict the overall rating
-of players, but these projects still lack the comparison among different models
-to choose the best one or give any persuasive insights or conclusions. Our project tries different models for rating
-prediction and determine their performances to find the best model and give insightful conclusions and opinions.
+The Fédération Internationale de Football Association (FIFA) publishes the overall rating and other metrics for soccer players every year in its authorized soccer game. Intuitively, the metrics of a player can affect the overall rating of a player. However, the exact rating criteria is still not published. Data analysis on soccer players' performance and abilities are being more and more valued by current soccer clubs. Thus, our project aims to predict the overall rating of players given their capability values.
 
-We implement regression methods in machine learning to this problem.
-We have trained our model based on a set of data randomly selected from our
-dataset, and then test our model on a stand-out test set also selected from our
-dataset. In this way, we create and validate a model predicting the overall
-rating of a player.
+Several data analyses projects have been designed for this dataset. However, these projects only focus on evaluating the metrics of players but failed to predict
+the overall rating of players. Some projects tried to predict the overall rating of players, but these projects still lack the comparison among different models
+to choose the best one or give any persuasive insights or conclusions. Our project tries different models for rating prediction and determine their performances to find the best model and give insightful conclusions and opinions.
+
+We will implement regression methods in machine learning to this problem. We plan to train our model based on a set of training data randomly selected from our dataset, and then test our model on a stand-out test set also selected from our dataset. In this way, we can create and validate a model predicting the overall rating of a player.
 
 
-Our project dataset is FIFA 2019 players attributes dataset, which is collected
-from Kaggle. This dataset includes 89 attributes of a soccer player, and our
-project only uses some of these attributes concerning only player capability.
-Besides, considering that goalkeepers have a totally different set of capability
-metrics compared with other players.
+Our project dataset is FIFA 2019 players attributes dataset, which is collected from Kaggle. This dataset includes 89 attributes of a soccer player, and our project only uses some of these attributes concerning only player capability. Details of data processing will be deeply illustrated in Dataset chapter.
 
-We implement linear regression and neural networks in our project. For each model, we use cross validation to find the
-best hyperparameter for each model. We compare their performance based
-on their $r2 score$ and testing $RMSE$. Finally choose the most accurate model, neural networks. In order to finish this model fitting and predicting process, we plan
-to randomly select data from our dataset, and then split the selected data into
-training and testing sets to implement cross validation.
+We will implement linear regression and neural network in our project. Solution chapter gives the details of our models, including their hyperparameters. In order to finish this model fitting and predicting process, we plan to randomly select data from our dataset, and then split the selected data into training and testing sets to implement cross validation.
+
+We will evaluate and compare the performance of these 2 models based on their $r2 score$ and testing $RMSE$. Besides, we will inspect the difference between these 2 models in practical use, and will mainly evaluate the usefulness of parameters of linear regression. This part will be further discussed in Results and Discussion chapter.
 
 
 \section*{Dataset}
@@ -101,25 +82,23 @@ Now we beginning the data processing.
 There are 18206 players for which 89 features each are provided. Firstly, we should drop the duplicate entries. 
 Then we check the columns (attributes). These columns can be grouped into 6 categories as follows: 
 
-\begin{table}[]
+\begin{table}[htpb]
     \centering
     \begin{tabular}{|l|l|}
     \hline
     \makecell[c]{\textit{Category}}     &       \makecell[c]{\textit{Attributes}} \\ \hline
     \textit{Basic Information}          &       \makecell[c]{\textit{ID, Name, Age, Photo, Nationality, Real Face, Height, Weight,} \\
                                                 \textit{Body Type, Special, Flag, Position, Club, Club Logo, Work Rate,} \\
-                                                \textit{Jersey Number, Weak Foot, Preferred Foot, Skill Moves,} \\
-                                                \textit{International Reputation}} \\ \hline
+                                                \textit{Jersey Number, Weak Foot, Preferred Foot, Skill Moves, Reputation}} \\ \hline
     \textit{Ratings}                    &       \makecell[c]{\textit{Overall, Potential, LS, ST, RS, LW, LF, CF, RF, RW, LAM,} \\
                                                 \textit{CAM, RAM, LM, LCM, CM, RCM, RM, LWB, LDM, CDM,} \\
                                                 \textit{RDM, RWB, LB, LCB, CB, RCB, RB}} \\ \hline
-    \textit{Market Value Related}       &       \makecell[c]{\textit{Value, Wage, Joined, Loaned From, Contract Valid Until,} \\
-                                                \textit{Release Clause}} \\ \hline
-    \textit{Abilities}                  &       \makecell[c]{\textit{Crossing, Finishing, HeadingAccuracy, ShortPassing, Volleys,} \\
-                                                \textit{Dribbling, Curve,FKAccuracy, LongPassing, BallControl,} \\
-                                                \textit{Acceleration, SprintSpeed, Agility, Reactions, Balance, ShotPower,} \\
-                                                \textit{Jumping, Stamina, Strength, LongShots, Aggression, Interceptions,} \\
-                                                \textit{Positioning, Vision, Penalties,Composure, Marking, StandingTackle,} \\ \textit{SlidingTackle}} \\ \hline
+    \textit{Market Value Related}       &       \makecell[c]{\textit{Value, Wage, Joined, Loaned From, Contract Valid Until, Release Clause}} \\ \hline
+    \textit{Abilities}                  &       \makecell[c]{\textit{Crossing, Finishing, HeadingAccuracy, ShortPassing, Volleys, Dribbling,} \\
+                                                \textit{Curve,FKAccuracy, LongPassing, BallControl, Acceleration, SprintSpeed,} \\
+                                                \textit{Agility, Reactions, Balance, ShotPower, Jumping, Stamina, Strength,} \\
+                                                \textit{LongShots, Aggression, Interceptions, Positioning, Vision, Penalties,} \\
+                                                \textit{Composure, Marking, StandingTackle, SlidingTackle}} \\ \hline
     \textit{Goalkeeper Abilities}       &       \makecell[c]{\textit{GKDiving, GKHandling, GKKicking, GKPositioning, GKReflexes}} \\ \hline
     \end{tabular}
     \caption{Columns (attributes) in the original dataset.}
@@ -127,24 +106,24 @@ Then we check the columns (attributes). These columns can be grouped into 6 cate
 
 \par Our model only focuses on predicting the overall rating of a player. Thus, we only need to keep those attributes related to the ability of players and drop the other irrelavent attributes. Besides, our model does not consider ratings on different positions for the same player. Thus, we only keep attributes as follows:
 
-\begin{table}[]
+\begin{table}[htpb]
     \centering
     \begin{tabular}{|l|l|}
     \hline
     \makecell[c]{\textit{Category}}     &       \makecell[c]{\textit{Attributes}} \\ \hline
     \textit{Basic Information}          &       \makecell[c]{\textit{Age, Position}} \\ \hline
     \textit{Ratings}                    &       \makecell[c]{\textit{Overall} (as target value)} \\ \hline
-    \textit{Abilities}                  &       \makecell[c]{\textit{Crossing, Finishing, HeadingAccuracy, ShortPassing, Volleys,} \\
-                                                \textit{Dribbling, Curve,FKAccuracy, LongPassing, BallControl,} \\
-                                                \textit{Acceleration, SprintSpeed, Agility, Reactions, Balance, ShotPower,} \\
-                                                \textit{Jumping, Stamina, Strength, LongShots, Aggression, Interceptions,} \\
-                                                \textit{Positioning, Vision, Penalties,Composure, Marking, StandingTackle,} \\ \textit{SlidingTackle}} \\ \hline
+    \textit{Abilities}                  &       \makecell[c]{\textit{Crossing, Finishing, HeadingAccuracy, ShortPassing, Volleys, Dribbling,} \\
+                                                \textit{Curve,FKAccuracy, LongPassing, BallControl, Acceleration, SprintSpeed,} \\
+                                                \textit{Agility, Reactions, Balance, ShotPower, Jumping, Stamina, Strength,} \\
+                                                \textit{LongShots, Aggression, Interceptions, Positioning, Vision, Penalties,} \\
+                                                \textit{Composure, Marking, StandingTackle, SlidingTackle}} \\ \hline
     \textit{Goalkeeper Abilities}       &       \makecell[c]{\textit{GKDiving, GKHandling, GKKicking, GKPositioning, GKReflexes}} \\ \hline
     \end{tabular}
     \caption{Columns (attributes) in the dataset for model prediction.}
 \end{table}
 
-\par After deleting all the irrelavent attributes, we still have to delete data records with missing values. These records are resulted from , and they could introduce errors into our prediction. The null values in each column are counted and sorted as follows:
+\par After deleting all the irrelavent attributes, we still have to delete data records with missing values. These records are resulted from the lack of player information of some small clubs, and they could introduce errors into our prediction. The null values in each column are counted and sorted as follows:
 
 \begin{table}[]
 \centering
@@ -155,9 +134,6 @@ Then we check the columns (attributes). These columns can be grouped into 6 cate
 \textit{1}     & \textit{GKReflexes}           & \textit{48}            & \textit{0.002636}        \\ \hline
 \textit{2}     & \textit{Curve}                & \textit{48}            & \textit{0.002636}        \\ \hline
 \textit{3}     & \textit{Agility}              & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{4}     & \textit{SprintSpeed}          & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{5}     & \textit{Acceleration}         & \textit{48}            & \textit{0.002636}        \\ \hline
-\textit{6}     & \textit{BallControl}          & \textit{48}            & \textit{0.002636}        \\ \hline
 \textit{...}   & \textit{...}                  & \textit{...}           & \textit{...}             \\ \hline
 \textit{35}    & \textit{Stamina}              & \textit{48}            & \textit{0.002636}        \\ \hline
 \textit{36}    & \textit{Overall}              & \textit{0}             & \textit{0.000000}        \\ \hline
@@ -166,12 +142,30 @@ Then we check the columns (attributes). These columns can be grouped into 6 cate
 \caption{Missing value percent.}
 \end{table}
 
-\par After deleting these missing values, we have 18147 rows left. After that, we still should inspect the data types of each column, and we should ensure the input attributes of our model are all of type $int$ to guarantee that our model works. The only attribute violating this in our model prediction dataset is $Position$. This attribute only indicates the position of a soccer player. Thus, we can divide all records into different categories according to their positions.
-\par We mainly divide players into 4 positions: \textbf{Forward}, \textbf{Midfielder}, \textbf{Back}, and \textbf{Goalkeeper}, and 4 CSV files are built for each of these categories to store them separately. Specially, we also built a CSV file to store all data together after our processing above.
+\par By observing these missing values in our dataset, all missing data lies in the 60 records with missing $Position$ value. After deleting these records with missing values, we have 18147 rows left in our dataset. After that, we still should inspect the data types of each column, and this is to ensure the input attributes of our model are all of type $int$ to guarantee that our model works. The only attribute violating this in our model prediction dataset is $Position$. This attribute only indicates the position of a soccer player.
+\par We divide all records into different categories according to their positions. In this way, we can get rid of this String-typed attribute. Besides, in real soccer industry, players can actually be categoried according to their positions. We mainly divide players into 4 positions: \textbf{Forward}, \textbf{Midfielder}, \textbf{Back}, and \textbf{Goalkeeper}. Besides, for prediction on players on any position, we also keep the original dataset, but only delete its $Position$ column.
+\par Finally, we implement data normalization on each column. We use the expression below to calculate normalized data:
+$$Normalized = \frac{Original-Mean}{Variance}$$
+In which $Mean$ and $Variance$ are the mean and variance of the original data $Original$. After this normalization, we output all 4 categoried datasets and the original dataset into 5 CSV files respectively.
 
 \section*{Solution}
+\subsection*{Feature Engineering}
+The process of taking raw data and extracting or creating new features that allow a machine learning model to learn a mapping between these features and the target. This might mean taking transformations of variables, such as we did with the log and square root, or one-hot encoding categorical variables so they can be used in a model. Generally, we think of feature engineering as adding additional features derived from the raw data.
+In this project, we take the following steps:
+\begin{itemize}
+    \item Group similar data(delete positions rating)
+    \item Convert object type variables to numerical by label encoding(transform string type to int type)
+\end{itemize}
 
-The solution section covers all of your model design, algorithms, formulas, findings etc. It explains in detail each contribution, if possible with figures/schematics.
+
+
+\subsection*{Feature Selection}
+ The process of choosing the most relevant features in your data. "Most relevant" can depend on many factors, but it might be something as simple as the highest correlation with the target, or the features with the most variance. In feature selection, we remove features that do not help our model learn the relationship between features and the target. This can help the model generalize better to new data and results in a more interpretable model. Generally, I think of feature selection as subtracting features so we are left with only those that are most important.
+In this project, we take the following steps:
+\begin{itemize}
+    \item Delete missing values
+    \item Remove features features that do not have a significant effect on the dependent variable or prediction of output by backward elimination.
+\end{itemize}
 
 
 
