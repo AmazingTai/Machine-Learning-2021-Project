@@ -12,6 +12,7 @@
 \usepackage{enumitem}
 \usepackage{amsthm}
 \usepackage{makecell}
+\usepackage{graphicx}
 
 %\lhead{\includegraphics[width=0.2\textwidth]{nyush-logo.pdf}}
 \fancypagestyle{firstpage}{%
@@ -106,24 +107,7 @@ Then we check the columns (attributes). These columns can be grouped into 6 cate
     \caption{Columns (attributes) in the original dataset.}
 \end{table}
 
-\par Our model only focuses on predicting the overall rating of a player. Thus, we only need to keep those attributes related to the ability of players and drop the other irrelavent attributes. Besides, our model does not consider ratings on different positions for the same player. Thus, we only keep attributes as follows:
-
-\begin{table}[htpb]
-    \centering
-    \begin{tabular}{|l|l|}
-    \hline
-    \makecell[c]{\textit{Category}}     &       \makecell[c]{\textit{Attributes}} \\ \hline
-    \textit{Basic Information}          &       \makecell[c]{\textit{Age, Position}} \\ \hline
-    \textit{Ratings}                    &       \makecell[c]{\textit{Overall} (as target value)} \\ \hline
-    \textit{Abilities}                  &       \makecell[c]{\textit{Crossing, Finishing, HeadingAccuracy, ShortPassing, Volleys, Dribbling,} \\
-                                                \textit{Curve,FKAccuracy, LongPassing, BallControl, Acceleration, SprintSpeed,} \\
-                                                \textit{Agility, Reactions, Balance, ShotPower, Jumping, Stamina, Strength,} \\
-                                                \textit{LongShots, Aggression, Interceptions, Positioning, Vision, Penalties,} \\
-                                                \textit{Composure, Marking, StandingTackle, SlidingTackle}} \\ \hline
-    \textit{Goalkeeper Abilities}       &       \makecell[c]{\textit{GKDiving, GKHandling, GKKicking, GKPositioning, GKReflexes}} \\ \hline
-    \end{tabular}
-    \caption{Columns (attributes) in the dataset for model prediction.}
-\end{table}
+\par Our model only focuses on predicting the overall rating of a player. Thus, we only need to keep those attributes related to the ability of players and drop the other irrelavent attributes. Besides, our model does not consider ratings on different positions for the same player. Thus, we only keep all $Abilities$, all $Goalkeeper\; Abilities$, $Age$ and $Position$ in $Basic\; Information$, and $Overall$ in ratings as our target value.
 
 \par After deleting all the irrelavent attributes, we still have to delete data records with missing values. These records are resulted from the lack of player information of some small clubs, and they could introduce errors into our prediction. The null values in each column are counted and sorted as follows:
 
@@ -191,16 +175,20 @@ Root Mean Square Error (RMSE) is the standard deviation of the residuals (predic
 \subsubsection*{$R^2$ Score}
 The $R^2score$ function computes the coefficient of determination. It represents the proportion of variance (of y) that has been explained by the independent variables in the model. It provides an indication of goodness of fit and therefore a measure of how well unseen samples are likely to be predicted by the model, through the proportion of explained variance.
 
-\begin{center}
-\includegraphics[scale=0.5]{rmse.png}\\
-\caption{Image 1, Model Comparison on RMSE}\\
-\includegraphics[scale=0.5]{r2score.png} \\
-\caption{Image 2, Model Comparison on $R^2$ Score}
-\end{center}
+\begin{figure}[!htb]
+	\centering
+    \includegraphics[scale=0.35]{rmse.png}
+    \caption{Model Comparison on RMSE}\label{fig1}
+\end{figure}
 
+\begin{figure}[!htb]
+	\centering
+    \includegraphics[scale=0.35]{r2score.png}
+    \caption{Model Comparison on $R^2$ Score}\label{fig2}
+\end{figure}
 
-Depending on the run (the exact results change slighty each time), the Neutral Network performs the best. We have to admit that this is not the most fair comparison because we are using mostly the default hyperparameters. Nonetheless, from these results, we can conclude that machine learning is applicable because all the models significantly outperform the baseline!
-From here, We are going to concentrate on optimizing the best model using hyperparamter tuning. Given the results here, we will concentrate on using the Linear Regression and  Neutral Network.
+Figures \ref{fig1} and \ref{fig2} shows our results of running all 5 models mentioned above. Depending on the run (the exact results change slighty each time), the Neutral Network performs the best. We have to admit that this is not the most fair comparison because we are using mostly the default hyperparameters. Nonetheless, from these results, we can conclude that machine learning is applicable because all the models significantly outperform the baseline.
+From here, We are going to concentrate on optimizing the best model using hyperparamter tuning. Given the results here, Neutral Network has the best performance of all these 5 models. However, consider that only linear regression can give coefficients for each attributes among all these models, linear regression can generate more information and has higher usability than other models. Thus, we will focus on both linear regression and neural network in the following part.
 
 
 \subsection*{Model Optimization}
@@ -210,23 +198,38 @@ In machine learning, optimizing a model means finding the best set of hyperparam
 First of all, we need to understand what model hyperparameters are in contrast to model parameters :
 
 Model hyperparameters are best thought of as settings for a machine learning algorithm that are tuned by the data scientist before training. Examples would be the number of trees in the random forest, or the number of neighbors used in K Nearest Neighbors Regression.
+
 Model parameters are what the model learns during training, such as the weights in the linear regression. We as data scientists control a model by choosing the hyperparameters, and these choices can have a significant effect on the final performance of the model (although usually not as great of an effect as getting more data or engineering features). Tuning the model hyperparameters controls the balance of under vs over fitting in a model. We can try to correct for under-fitting by making a more complex model, such as using more trees in a random forest or more layers in a deep neural network. A model that underfits has high bias, and occurs when our model does not have enough capacity (degrees of freedom) to learn the relationship between the features and the target. We can try to correct for overfitting by limiting the complexity of the model and applying regularization. This might mean decreasing the degree of a polynomial regression, or adding dropout layers to a deep neural network. A model that overfits has high variance and in effect has memorized the training set. Both underfitting and overfitting lead to poor generalization performance on the test set.
 The problem with choosing the hyperparameters is that no set will work best across all problems. Therefore, for every new dataset, we have to find the best settings. This can be a time-consuming process, but luckily there are several options for performing this procedure in Scikit-Learn.
 
 
-\subsection*{Evaluate Final Model on the Test Set}
-We will use the best model from hyperparameter tuning to make predictions on the testing set. Our model has never seen the test set before, so this performance should be a good indicator of how the model would perform if deployed in the real world.
-
-\begin{center}
-\includegraphics[scale=0.5]{liner.png}\\
-\caption{Image 3, Linear Model for Overall Rating Prediction}\\
-\includegraphics[scale=0.5]{nn.png} \\
-\caption{Image 4, Neutral Network Model for Overall Rating Prediction}
-\end{center}
-
-
 \section*{Results and Discussion}
-The results section details your metrics and experiments for the assessment of your solution. It allows you to compare your idea with other approaches you've tested. 
+\subsection*{Results}
+We will use the best model from hyperparameter tuning to make predictions on the testing set and generate our final result. Our model has never seen the test set before, so this performance should be a good indicator of how the model would perform if deployed in the real world.
+
+\begin{figure}[!htb]
+	\centering
+    \includegraphics[scale=0.45]{linear.png}
+    \caption{Results of linear regression for overall rating prediction.}\label{fig3}
+\end{figure}
+
+\begin{figure}[!htb]
+	\centering
+    \includegraphics[scale=0.45]{nn.png}
+    \caption{Results of neutral network for overall rating prediction.}\label{fig4}
+\end{figure}
+
+Figures \ref{fig3} and \ref{fig4} shows the results of linear regression and neural network on our testing set.
+
+On Predictions-Overall Rating axis, the testing results are close to $y=x$, which indicates that our prediction results are almost the same as actual values. This shows that our model performs well in predicting the ability of a player given his / her metrics.
+
+Besides, for our linear regression model, we also plot its coefficients for all 4 position categories. Figure \ref{fig5} shows the coefficients of linear regression model for players of each position categories.
+
+\begin{figure}[!htb]
+	\centering
+    \includegraphics[scale=0.5]{coefs.png}
+    \caption{Coefficients of linear regression model.}\label{fig5}
+\end{figure}
 
 \nocite{*}
 \bibliographystyle{IEEEtran}
