@@ -45,7 +45,7 @@
     
     Although the $overall$ rating is the most important value either in the real football market or FIFA games, the official rating criteria is still not published. Our model is to predict the $overall$ rating of players given their several capability values. Specially, we will divide players' position into 4 categories: forwards / strikers, midfielders, backfielders and goalkeepers, and we will predict overall ratings for each of these categories respectively.
     
-    To demonstrate the benefits of our model, we built various charts and evaluated it. In our experiments, neural networks could ... compared to liner regression.
+    To demonstrate the benefits of our model, we built various charts and evaluated it. In our experiments, we evaluate the performance of 5 different models, which are Linear Regression, Random Forest, Gradient Boosted, K-Nearest Neighbors and Neural Network. Finally, we choose the best model and the most useful model among all these models and discussed their different usages.
     
 \end{abstract}
 
@@ -204,7 +204,6 @@ The problem with choosing the hyperparameters is that no set will work best acro
 
 
 \section*{Results and Discussion}
-\subsection*{Results}
 We will use the best model from hyperparameter tuning to make predictions on the testing set and generate our final result. Our model has never seen the test set before, so this performance should be a good indicator of how the model would perform if deployed in the real world.
 
 \begin{figure}[!htb]
@@ -221,7 +220,7 @@ We will use the best model from hyperparameter tuning to make predictions on the
 
 Figures \ref{fig3} and \ref{fig4} shows the results of linear regression and neural network on our testing set.
 
-On Predictions-Overall Rating axis, the testing results are close to $y=x$, which indicates that our prediction results are almost the same as actual values. This shows that our model performs well in predicting the ability of a player given his / her metrics.
+On Predictions-Overall Rating axis, the testing results are close to $y=x$, which indicates that our prediction results are almost the same as actual values. This shows that our model performs well in predicting the ability of a player given his / her metrics. 
 
 Besides, for our linear regression model, we also plot its coefficients for all 4 position categories. Figure \ref{fig5} shows the coefficients of linear regression model for players of each position categories.
 
@@ -230,6 +229,30 @@ Besides, for our linear regression model, we also plot its coefficients for all 
     \includegraphics[scale=0.5]{coefs.png}
     \caption{Coefficients of linear regression model.}\label{fig5}
 \end{figure}
+
+Invesgating these parameters, we have some interesting observations. The value of parameters can reflect the significance of an ability to a position. Below we take midfielders as an example.
+
+We use Python's $heapq$ library to find the 5 largest coefficients and their corresponding attribute names of linear regression model for midfielders. The results are shown in the table below.
+
+\begin{table}[htpb]
+    \centering
+    \begin{tabular}{|l|l|}
+    \hline
+    \textit{Attribute Name}             &       \textit{Coefficient Value} \\ \hline
+    \textit{BallControl}                &       \textit{0.24730435} \\ \hline
+    \textit{ShortPassing}               &       \textit{0.18084552} \\ \hline
+    \textit{Reactions}                  &       \textit{0.14724705} \\ \hline
+    \textit{Dribbling}                  &       \textit{0.07184282} \\ \hline
+    \textit{Age}                        &       \textit{0.06818059} \\ \hline
+    \end{tabular}
+    \caption{The 5 largest coefficients and their corresponding attribute names.}
+\end{table}
+
+From this table, we can observe that the main attributes contributing to a midfielder's overall rating are ball control, short passing, reactions and dribbling. This actually matches the reality, since normally a midfielder should control the ball and try to pass it to attacking players nearby. Besides, an older midfielder tends to have higher overall rating. This also shows that a midfielder with more experience is highly appreciated, since $Age$ also has a high coefficient value.
+
+The attributes with high coefficients highly reflects the requirement of corresponding position. In this way, these information can be quite useful for soccer clubs to design suitable tactics or to improve their training for their own players. A soccer team can even use its own player data to train these coefficients, and inspect which attributes reflects the team's style, and then pay more attention to practicing on these aspects in their youth training.
+
+In summary, neural network model performs a little bit better on accurately predicting overall ratings, while linear regression can provide more information about positions to soccer clubs. From our perspective, these 2 models can be used cooperatively for soccer clubs. Neural network can give accurate prediction for ratings to find potent players, and linear regression can be used to provide information for helping cultivating young players or planning tactics.
 
 \nocite{*}
 \bibliographystyle{IEEEtran}
